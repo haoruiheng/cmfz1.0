@@ -1,0 +1,34 @@
+1.库表设计分析cmfz_xxx(表名)  10张表
+  1.菜单表（menu）：id、title、url/href、iconCls、parent_id;
+  2.管理员表（admin）：id、username、password（pwd==系统关键字）
+  3.上师表（guru）：id、name、profile（肖像图片）、brief、status；
+  4.轮播图表（carousel/banner）：id、title、desc、imgPath、status、createTime
+  
+ (1*n)
+  5.专辑表（album）：id、title、cover（封面）、count、author、broadCast、publishDate、brief、score
+  6.章节表（chapter）：id、title、size、duration（时长）、downloadPath、uploadDate  
+
+  7.文章表（article）：id、title、content、figurePath（插图）、publishDate、status
+  
+
+  两个1*n的关系   中间表:计数器表
+  8.功课表（course）：id、title、marking（标识type）、createTime、status   
+  9.计数器表（counter）：id、title、count、createTime、user_id、course_id
+  10.用户表（user）：id、phoneNum、username、password、salt（盐值）、dharmaName（法名）、gender（sex）、
+sign（签名）、profile（图像）、province、city、status、registerTime
+
+	
+2.项目开发要求：开发环境（SSM+EasyUI+Mysql）
+
+  项目名称 cmfz_xxx  例如 cmfz_zs/cmfz_qfc
+  项目包名：com.baizhi.XXX(dao/service/entity(pojo)/controller/mapper/conf/sql/test/utils/)
+  方法名要求：insertXXX、updateXXX、selectXXX、deleteXXX（dao里面的方法名称）
+	      addXXX、modifyXXX、findXXX、removeXXX（service里面的方法名称）
+
+
+
+任务：
+1.搭建开发环境（SSM+EasyUI+Mysql），并且调适好开发环境。
+2.登录
+
+

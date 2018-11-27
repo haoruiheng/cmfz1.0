@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.Cmfz_courseDao"><!-- 实现的接口 -->
+<!-- 功课模块 -->
+	
+	<!-- 查询结果手动映射 -->
+	<resultMap type="com.entity.Cmfz_user" id="Cmfz_user">
+		<!-- 普通属性 字段-属性-->
+		<result column="user_nickname" property="user_nickname"/>
+		<!-- 2.关系属性(集合类型) -->
+		<collection property="course" ofType="com.entity.Cmfz_course">
+			<id column="course_id" property="course_id"/>
+			<!-- 普通属性 -->
+			<result column="course_title" property="course_title"/>
+			<result column="course_marking" property="course_marking"/>
+		</collection>
+	</resultMap>
+	<!-- 查询所有（默认|用户功课） -->
+	<select id="selectCourseAll"  resultType="com.entity.Cmfz_course">
+		select course_id,course_title,course_marking 
+		from cmfz_course
+		where course_marking=${marking}
+		order by course_id desc
+		limit ${(page-1)*rows},${rows}
+	</select>
+	<!-- 总条数 -->
+	<select id="SumMarking"  resultType="int">
+		select count(*) from cmfz_course 
+		where course_marking=${marking}
+	</select>
+	<!-- 根据用户id查询课程 -->
+	<select id="selectCourseOne" resultType="com.entity.Cmfz_course">
+		select course_id,course_title,course_marking
+		from cmfz_course co
+		join cmfz_user_course uc on uc.user_course_course_id = co.course_id
+		join cmfz_user u  on  u.user_id= uc.user_course_user_id
+		where u.user_id=${user_id}
+		order by co.course_id desc
+	</select>
+	<!-- 添加数据 -->
+	<insert id="insertData" parameterType="com.entity.Cmfz_course">
+		insert into cmfz_course values(null,#{course_title},#{course_marking})
+	</insert>
+	<!-- 删除数据 -->
+	<delete id="deleteDate" parameterType="int">
+		delete from cmfz_course where course_id=#{id}
+	</delete>
+	
+</mapper>

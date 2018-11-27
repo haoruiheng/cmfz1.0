@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+							http://www.springframework.org/schema/tx 
+							http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+							http://www.springframework.org/schema/context
+							http://www.springframework.org/schema/context/spring-context-3.2.xsd
+							http://www.springframework.org/schema/aop 
+							http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+							">
+    <!-- 1.引DB小配置文件 -->
+<!--
+    <context:property-placeholder location="classpath:com/conf/jdbc.properties"/>
+-->
+    <!-- 连接池 -->
+    <!-- 2.配置数据源 -->
+    <bean id="ds" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="url" value="jdbc:mysql://localhost:3306/hrh?characterEncoding=UTF-8"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="123"></property>
+    </bean>
+    <!-- 3.配置SqlSessionFactory -->
+    <bean id="factory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 注入数据源 -->
+        <property name="dataSource" ref="ds"></property>
+
+        <!-- 注册mapper文件 -->
+        <property name="mapperLocations">
+            <array>
+                <value>classpath:com/Mapper/*Mapper.xml</value><!-- ems.dao包中所有的xml文件 -->
+            </array>
+        </property>
+    </bean>
+    <!-- 4.配置dao -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 注入mapper的接口，值为 包名.子包名.接口名 -->
+        <!-- dao包中所有的接口 -->
+        <property name="basePackage" value="com.dao"></property><!-- dao包里面的所有 -->
+        <!-- 获取连接 -->
+        <property name="sqlSessionFactoryBeanName" value="factory"></property>
+    </bean>
+
+    <!-- 5.注解开发 包扫描 -->
+    <context:component-scan base-package="com.service.impl"/>
+
+    <!-- 6.配置事物管理器，并指定事物属性 -->
+    <bean id="tm" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="ds"></property>
+    </bean>
+    <!-- 7.事物注解生效 -->
+    <tx:annotation-driven transaction-manager="tm"/>
+    <!-- 1、配置通知类 -->
+    <bean id="myAdvice" class="com.aop.MyAdvice"/>
+
+    <!-- 2、配置Aop -->
+    <aop:config>
+        <!-- 2.2、 配置切入点 -->
+        <aop:pointcut id="pc1" expression="execution(* com.baizhi.service.impl.*.*(..))"/>
+        <!-- 2.3、 配置组装切面 -->
+        <aop:advisor pointcut-ref="pc1" advice-ref="myAdvice"/>
+    </aop:config>
+</beans>
+ 

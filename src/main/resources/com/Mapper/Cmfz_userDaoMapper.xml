@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.Cmfz_userDao"><!-- 实现的接口 -->
+	<!-- 查询结果手动映射 -->
+	<resultMap type="com.entity.Cmfz_user" id="user">
+		<!-- 主属性字段名-实体名 -->
+		<id column="user_id" property="user_id"/>		
+		<!-- 普通属性 字段-属性-->
+		<result column="user_uid" property="user_uid"/>
+		<result column="user_password" property="user_password"/>
+		<result column="user_farmington" property="user_farmington"/>
+		<result column="user_nickname" property="user_nickname"/>
+		<result column="user_photo" property="user_photo"/>
+		<result column="user_location" property="user_location"/>
+		<result column="user_phone" property="user_phone"/>
+		<result column="user_status" property="user_status"/>
+		<!-- 1.关系属性(普通对象) -->
+		<association property="user_guruId" javaType="com.entity.Cmfz_guru">
+			<id column="guru_id" property="guru_id"/>
+			<!-- 普通属性 -->
+			<result column="guru_name" property="guru_name"/>
+		</association>
+	</resultMap>
+	<!-- 查询所有 -->
+	<select id="selectFYAll"  resultMap="user">
+		select user_id,user_uid,user_password,user_farmington,user_nickname,user_photo,user_location,user_phone,user_status
+			,guru_id,guru_name
+		from cmfz_user us
+		inner join Cmfz_guru gu
+		on us.user_guruId  = gu.guru_id 
+		order by user_id desc
+		limit ${(page-1)*rows},${rows}
+	</select>
+	<!-- 总条数 -->
+	<select id="Sum"  resultType="int">
+		select count(*) from cmfz_user	
+	</select>
+	<!-- 添加数据 -->
+	<insert id="insertData" parameterType="com.entity.Cmfz_user">
+		insert into cmfz_user values(null,#{user_uid},#{user_password},#{user_farmington},#{user_nickname},#{user_photo},#{user_location},#{user_phone},#{user_status},#{user_guruId.guru_id})
+	</insert>
+	<!-- 查一个 -->
+	<select id="selectOne" resultMap="user" >
+		select user_id,user_uid,user_password,user_farmington,user_nickname,user_photo,user_location,user_phone,user_status
+			,guru_id,guru_name
+		from cmfz_user us
+		inner join Cmfz_guru gu
+		on us.user_guruId  = gu.guru_id 
+		where user_id=#{id}
+	</select>
+	<!-- 修改数据 -->
+	<update id="updateData" parameterType="com.entity.Cmfz_user">
+		update cmfz_user set  user_password=#{user_password},user_farmington=#{user_farmington},user_nickname=#{user_nickname},user_photo=#{user_photo},user_location=#{user_location},user_phone=#{user_phone},user_status=#{user_status.guru_id}   
+		where user_id=#{user_id}
+	</update>
+	<!-- 删除数据 -->
+	<delete id="deleteDate" parameterType="int">
+		delete from cmfz_user where user_id=#{id}
+	</delete>
+	<!-- 修改状态 -->
+	<update id="updateStatus">
+		update cmfz_user set  user_status=#{status}
+		where user_id=#{user_id}
+	</update>
+	<!-- 根据账号密码查询 -->
+	<select id="selectUidPws" resultType="com.entity.Cmfz_user">
+		select user_id,user_uid,user_password,user_farmington,user_nickname,user_photo,user_location,user_phone,user_status
+		from cmfz_user us
+		where user_uid=#{user_uid} and user_password=#{user_password}
+	</select>
+</mapper>

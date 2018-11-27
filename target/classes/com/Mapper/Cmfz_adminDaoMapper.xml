@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.Cmfz_adminDao"><!-- 实现的接口 -->
+	
+	<!-- 查询所有 -->
+	<select id="selectPwdUname"  resultType="com.entity.Cmfz_admin">
+		select cmfz_id,cmfz_username,cmfz_password from cmfz_admin 
+		where cmfz_username=#{username} and cmfz_password=#{password}
+	</select>
+</mapper>

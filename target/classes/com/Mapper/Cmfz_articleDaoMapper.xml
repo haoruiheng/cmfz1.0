@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.Cmfz_articleDao"><!-- 实现的接口 -->
+	<!-- 查询结果手动映射 -->
+	<resultMap type="com.entity.Cmfz_article" id="article">
+		<!-- 主属性字段名-实体名 -->
+		<id column="article_id" property="article_id"/>		
+		<!-- 普通属性 字段-属性-->
+		<result column="article_title" property="article_title"/>
+		<result column="article_content" property="article_content"/>
+		<result column="article_figurePath" property="article_figurePath"/>
+		<result column="article_publishDate" property="article_publishDate"/>
+		<result column="article_status" property="article_status"/>
+		<!-- 1.关系属性(普通对象) -->
+		<association property="article_guruId" javaType="com.entity.Cmfz_guru">
+			<id column="guru_id" property="guru_id"/>
+			<!-- 普通属性 -->
+			<result column="guru_name" property="guru_name"/>
+		</association>
+	</resultMap>
+	<!-- 查询所有 -->
+	<select id="selectFYAll"  resultMap="article">
+		select article_id,article_title,article_content,article_figurePath,article_publishDate,article_status
+		,guru_id,guru_name
+		from Cmfz_article ar
+		join Cmfz_guru gu 
+		on  ar.article_guruId = gu.guru_id 
+		order by article_id desc
+		limit ${(page-1)*rows},${rows}
+	</select>
+	<!-- 总条数 -->
+	<select id="Sum"  resultType="int">
+		select count(*) from Cmfz_article
+	</select>
+	<!-- 添加数据 -->
+	<insert id="insertData" parameterType="com.entity.Cmfz_article">
+		insert into Cmfz_article values(null,#{article_title},#{article_content},#{article_figurePath},#{article_publishDate},1,#{article_guruId.guru_id})
+	</insert>
+	<!-- 删除数据 -->
+	<delete id="deleteDate" parameterType="int">
+		delete from Cmfz_article where article_id=#{id}
+	</delete>
+</mapper>

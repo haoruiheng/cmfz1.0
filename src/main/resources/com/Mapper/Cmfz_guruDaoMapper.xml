@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.Cmfz_guruDao"><!-- 实现的接口 -->
+<!-- 上师表 -->	
+	<!-- 分页查询所有 -->
+	<select id="selectFYAll"  resultType="com.entity.Cmfz_guru">
+		select guru_id,guru_name,guru_profile,guru_brief,guru_status 
+		from Cmfz_guru
+		order by guru_id desc
+		limit ${(page-1)*rows},${rows}
+	</select>
+	<!-- 总条数 -->
+	<select id="Sum"  resultType="int">
+		select count(*) from Cmfz_guru
+	</select>
+	<!-- 查所有 -->
+	<select id="selectAll" resultType="com.entity.Cmfz_guru">
+		select guru_id,guru_name,guru_profile,guru_brief,guru_status 
+		from Cmfz_guru
+	</select>
+	<!-- 添加数据 -->
+	<insert id="insertData" parameterType="com.entity.Cmfz_guru">
+		insert into Cmfz_guru values(null,#{guru_name},#{guru_profile},#{guru_brief},1)
+	</insert>
+	<!-- 修改数据 -->
+	<update id="updateData" parameterType="com.entity.Cmfz_guru">
+		update Cmfz_guru set guru_status=#{guru_status}
+		where guru_id=#{guru_id}
+	</update>
+</mapper>

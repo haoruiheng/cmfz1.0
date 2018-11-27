@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.Cmfz_bannerDao"><!-- 实现的接口 -->
+	
+	<!-- 查询所有 -->
+	<select id="selectAll"  resultType="com.entity.Cmfz_banner">
+		select banner_id,banner_title,banner_imgPath,banner_status,banner_createTime 
+		from Cmfz_banner
+	</select>
+	<!-- 添加数据 -->
+	<insert id="insertData" parameterType="com.entity.Cmfz_banner">
+		insert into Cmfz_banner values(null,#{banner_title},null,#{banner_imgPath},#{banner_status},#{banner_createTime})
+	</insert>
+	<!-- 查一个 -->
+	<select id="selectOne" resultType="com.entity.Cmfz_banner" parameterType="int">
+		select  banner_id,banner_title,banner_imgPath,banner_status,banner_createTime from Cmfz_banner where banner_id=#{id}
+	</select>
+	<!-- 修改数据 -->
+	<update id="updateData" parameterType="com.entity.Cmfz_banner">
+		update  Cmfz_banner set banner_title=#{banner_title},banner_imgPath=#{banner_imgPath},banner_status=#{banner_status} where banner_id=#{banner_id}
+	</update>
+	<!-- 删除数据 -->
+	<delete id="deleteDate" parameterType="int">
+		delete  from Cmfz_banner where banner_id=#{id}
+	</delete>
+</mapper>

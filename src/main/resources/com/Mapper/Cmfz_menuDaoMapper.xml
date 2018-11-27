@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.Cmfz_menuDao"><!-- 实现的接口 -->
+	<!-- 手动映射 -->
+	<resultMap type="com.entity.Cmfz_menu" id="Cmfz_menu">
+		<!-- 主属性字段名-实体名 -->
+		<id column="c_id" property="cmfz_id"/>		
+		<!-- 普通属性 字段-属性-->
+		<result column="c_title" property="cmfz_title"/>
+		
+		<!-- 2.关系属性(集合类型) -->
+		<collection property="parent_idd" ofType="com.entity.Cmfz_menu">
+			<id column="cc_id" property="cmfz_id"/>
+			<!-- 普通属性 -->
+			<result column="cc_title" property="cmfz_title"/>
+			<result column="cc_url" property="cmfz_url"/>
+		</collection>
+	</resultMap>
+	<!-- 查询菜单 --><!-- 取别名 -->
+	<select id="selectAll" resultMap="Cmfz_menu">
+		select c.cmfz_id c_id,c.cmfz_title c_title,cc.cmfz_title cc_title,cc.cmfz_url cc_url from cmfz_menu c
+		inner join cmfz_menu cc
+		on cc.parent_id = c.cmfz_id 
+	</select>
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.Cmfz_albumDao"><!-- 实现的接口 -->
+	
+	<!-- 查询所有 -->
+	<select id="selectFYAll"  resultType="com.entity.Cmfz_album">
+		select album_id,album_title,album_cover,album_count,album_author,album_broadCast,album_publishDate,album_brief 
+		from Cmfz_album 
+		order by album_id desc
+		limit ${(page-1)*rows},${rows}
+	</select>
+	<!-- 总条数 -->
+	<select id="Sum"  resultType="int">
+		select count(*) from Cmfz_album
+	</select>
+	<!-- 添加数据 -->
+	<insert id="insertData"  parameterType="com.entity.Cmfz_album">
+		insert into Cmfz_album values(null,#{album_title},#{album_cover},'0',#{album_author},#{album_broadCast},#{album_publishDate},#{album_brief})
+	</insert>
+</mapper>
